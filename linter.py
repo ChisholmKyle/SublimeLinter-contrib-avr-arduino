@@ -18,21 +18,21 @@ import string
 
 
 def arduino_flags(board):
-    extra_flags = '-Os -DARDUINO_ARCH_AVR'
+    extra_flags = ' -Os -DARDUINO_ARCH_AVR '
     if board == 'Uno':
-        extra_flags += ' -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_UNO'
+        extra_flags += '-mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_UNO '
     elif  board == 'ProMini5V328':
-        extra_flags += ' -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_PRO'
+        extra_flags += '-mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_PRO '
     elif  board == 'ProMini5V168':
-        extra_flags += ' -mmcu=atmega168 -DF_CPU=16000000L -DARDUINO_AVR_PRO'
+        extra_flags += '-mmcu=atmega168 -DF_CPU=16000000L -DARDUINO_AVR_PRO '
     elif  board == 'ProMini3V328':
-        extra_flags += ' -mmcu=atmega328p -DF_CPU=8000000L -DARDUINO_AVR_PRO'
+        extra_flags += '-mmcu=atmega328p -DF_CPU=8000000L -DARDUINO_AVR_PRO '
     elif  board == 'ProMini3V168':
-        extra_flags += ' -mmcu=atmega168 -DF_CPU=8000000L -DARDUINO_AVR_PRO'
+        extra_flags += '-mmcu=atmega168 -DF_CPU=8000000L -DARDUINO_AVR_PRO '
     elif board == 'Mega1280':
-        extra_flags += ' -mmcu=atmega1280 -DF_CPU=16000000L -DARDUINO_AVR_MEGA'
+        extra_flags += '-mmcu=atmega1280 -DF_CPU=16000000L -DARDUINO_AVR_MEGA '
     elif board == 'Mega2560':
-        extra_flags += ' -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO_AVR_MEGA2560'
+        extra_flags += '-mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO_AVR_MEGA2560 '
     return extra_flags
 
 
