@@ -19,19 +19,19 @@ import string
 
 def arduino_flags(board):
     extra_flags = '-Os -DARDUINO_ARCH_AVR'
-    if board === 'Uno':
+    if board == 'Uno':
         extra_flags += ' -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_UNO'
-    elif  board === 'ProMini5V328':
+    elif  board == 'ProMini5V328':
         extra_flags += ' -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_PRO'
-    elif  board === 'ProMini5V168':
+    elif  board == 'ProMini5V168':
         extra_flags += ' -mmcu=atmega168 -DF_CPU=16000000L -DARDUINO_AVR_PRO'
-    elif  board === 'ProMini3V328':
+    elif  board == 'ProMini3V328':
         extra_flags += ' -mmcu=atmega328p -DF_CPU=8000000L -DARDUINO_AVR_PRO'
-    elif  board === 'ProMini3V168':
+    elif  board == 'ProMini3V168':
         extra_flags += ' -mmcu=atmega168 -DF_CPU=8000000L -DARDUINO_AVR_PRO'
-    elif board === 'Mega1280':
+    elif board == 'Mega1280':
         extra_flags += ' -mmcu=atmega1280 -DF_CPU=16000000L -DARDUINO_AVR_MEGA'
-    elif board === 'Mega2560':
+    elif board == 'Mega2560':
         extra_flags += ' -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO_AVR_MEGA2560'
     return extra_flags
 
@@ -39,35 +39,35 @@ def arduino_flags(board):
 def arduino_include(root, board, corelibs):
     include_dirs = [root + '/hardware/arduino/avr/cores/arduino']
     # boards (variant)
-    if board === 'Uno':
-        include_dirs.append([
+    if board == 'Uno':
+        include_dirs.extend([
             root + '/hardware/arduino/avr/variants/standard'
         ])
-    elif board === 'ProMini5V328' or \
-         board === 'ProMini5V168' or \
-         board === 'ProMini3V328' or \
-         board === 'ProMini3V168':
-        include_dirs.append([
+    elif board == 'ProMini5V328' or \
+         board == 'ProMini5V168' or \
+         board == 'ProMini3V328' or \
+         board == 'ProMini3V168':
+        include_dirs.extend([
             root + '/hardware/arduino/avr/variants/eightanaloginputs'
         ])
-    elif board === 'Mega1280' or \
-         board === 'Mega2560':
-        include_dirs.append([
+    elif board == 'Mega1280' or \
+         board == 'Mega2560':
+        include_dirs.extend([
             root + '/hardware/arduino/avr/variants/mega'
         ])
     # core libraries
-    for each corelib in corelibs:
-        if corelib === 'Wire':
-            include_dirs.append([
+    for corelib in corelibs:
+        if corelib == 'Wire':
+            include_dirs.extend([
                 root + '/hardware/arduino/avr/libraries/Wire/src',
                 root + '/hardware/arduino/avr/libraries/Wire/src/utility'
             ])
-        elif corelib === 'SPI':
-            include_dirs.append([
+        elif corelib == 'SPI':
+            include_dirs.extend([
                 root + '/hardware/arduino/avr/libraries/SPI/src'
             ])
-        elif corelib === 'EEPROM':
-            include_dirs.append([
+        elif corelib == 'EEPROM':
+            include_dirs.extend([
                 root + '/hardware/arduino/avr/libraries/EEPROM/src'
             ])
     return include_dirs
@@ -94,11 +94,11 @@ def apply_template(s):
     return templ.safe_substitute(mapping)
 
 
-class AvrGcc(Linter):
+class AvrArduino(Linter):
     """Provides an interface to avr-gcc."""
 
     syntax = ('c', 'c++', 'c++11')
-    executable = 'avr-gcc'
+    executable = 'avr-arduino'
 
     version_args = '--version'
     version_re = r'(?P<version>\d+\.\d+\.\d+)'
@@ -158,7 +158,7 @@ class AvrGcc(Linter):
 
         # arduino
         extra_flags += arduino_flags(arduino_board)
-        include_dirs.append(arduino_include(arduino_root, arduino_board, arduino_libs))
+        include_dirs.extend(arduino_include(arduino_root, arduino_board, arduino_libs))
 
         # append to base command
         result = self.base_cmd
