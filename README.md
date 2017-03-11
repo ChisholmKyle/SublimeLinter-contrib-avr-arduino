@@ -53,6 +53,8 @@ In addition to the standard SublimeLinter settings, SublimeLinter-contrib-avr-ar
 |arduino_root|Root installation directory for Arduino.|
 |include_dirs|A list of directories to be added to the header search paths (-I is not needed).|
 |extra_flags|A string with extra flags to pass to avr-arduino. These should be used carefully, as they may cause linting to fail.|
+|arduino-root|Root Arduino directory.|
+|arduino-libs|List of core Arduino libraries.|
 |board|Arduino board name to lint.|
 
 In project-specific settings, '${project_folder}' can be used to specify a relative path. Here is an example of project settings for development on an Arduino Mini Pro 5V:
@@ -64,11 +66,14 @@ In project-specific settings, '${project_folder}' can be used to specify a relat
     {
         "avrgcc": {
             "include_dirs": [
-                "${project_folder}/include",
-                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/cores/arduino",
-                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/variants/eightanaloginputs"
+                "${project_folder}/include"
             ],
-            "extra_flags": "-mmcu=atmega328p -DF_CPU=16000000L"
+            "extra_flags": "-pedantic -Wextra",
+            "extra_cflags": "-std=gnu99",
+            "extra_cxxflags": "-std=gnu++14",
+            "arduino-root": "/Applications/Arduino.app/Contents/Java",
+            "board": "Uno",
+            "arduino-libs": ["Wire", "EEPROM"]
         }
     }
 },
