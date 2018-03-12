@@ -11,7 +11,7 @@
 """This module exports the AvrGcc plugin class."""
 
 import shlex
-from SublimeLinter.lint import Linter, util, persist
+from SublimeLinter.lint import Linter, util
 import sublime
 import os
 import string
@@ -21,13 +21,13 @@ def arduino_flags(board):
     extra_flags = ' -Os -DARDUINO_ARCH_AVR '
     if board == 'Uno':
         extra_flags += '-mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_UNO '
-    elif  board == 'ProMini5V328':
+    elif board == 'ProMini5V328':
         extra_flags += '-mmcu=atmega328p -DF_CPU=16000000L -DARDUINO_AVR_PRO '
-    elif  board == 'ProMini5V168':
+    elif board == 'ProMini5V168':
         extra_flags += '-mmcu=atmega168 -DF_CPU=16000000L -DARDUINO_AVR_PRO '
-    elif  board == 'ProMini3V328':
+    elif board == 'ProMini3V328':
         extra_flags += '-mmcu=atmega328p -DF_CPU=8000000L -DARDUINO_AVR_PRO '
-    elif  board == 'ProMini3V168':
+    elif board == 'ProMini3V168':
         extra_flags += '-mmcu=atmega168 -DF_CPU=8000000L -DARDUINO_AVR_PRO '
     elif board == 'Mega1280':
         extra_flags += '-mmcu=atmega1280 -DF_CPU=16000000L -DARDUINO_AVR_MEGA '
@@ -44,14 +44,14 @@ def arduino_include(root, board, corelibs):
             root + '/hardware/arduino/avr/variants/standard'
         ])
     elif board == 'ProMini5V328' or \
-         board == 'ProMini5V168' or \
-         board == 'ProMini3V328' or \
-         board == 'ProMini3V168':
+            board == 'ProMini5V168' or \
+            board == 'ProMini3V328' or \
+            board == 'ProMini3V168':
         include_dirs.extend([
             root + '/hardware/arduino/avr/variants/eightanaloginputs'
         ])
     elif board == 'Mega1280' or \
-         board == 'Mega2560':
+            board == 'Mega2560':
         include_dirs.extend([
             root + '/hardware/arduino/avr/variants/mega'
         ])
@@ -158,16 +158,18 @@ class AvrArduino(Linter):
 
         # arduino
         extra_flags += arduino_flags(arduino_board)
-        include_dirs.extend(arduino_include(arduino_root, arduino_board, arduino_libs))
+        include_dirs.extend(
+            arduino_include(arduino_root, arduino_board, arduino_libs))
 
         # append to base command
         result = self.base_cmd
-        if persist.get_syntax(self.view) in ['c', 'c improved']:
+        if util.get_syntax(self.view) in ['c', 'c improved']:
             result += ' -x c ' + settings.get('extra_cflags', '') + ' '
-        elif persist.get_syntax(self.view) in ['c++', 'c++11']:
+        elif util.get_syntax(self.view) in ['c++', 'c++11']:
             result += ' -x c++ ' + settings.get('extra_cxxflags', '') + ' '
         result += apply_template(extra_flags)
         if include_dirs:
-            result += apply_template(' '.join([' -I ' + shlex.quote(include) for include in include_dirs]))
+            result += apply_template(' '.join(
+                [' -I ' + shlex.quote(include) for include in include_dirs]))
 
         return result + ' -'
